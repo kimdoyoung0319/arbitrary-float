@@ -1,0 +1,14 @@
+name = "afloat"
+version = "0.1.0"
+defaultTargets = ["afloat"]
+
+[[lean_lib]]
+name = "AFloat"
+
+[[lean_exe]]
+name = "afloat"
+root = "Main"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
