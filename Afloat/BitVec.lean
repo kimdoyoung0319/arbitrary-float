@@ -49,6 +49,7 @@ bitvector has v bits.
 def fillOneMsb {w : Nat} (x : BitVec w) : BitVec (1 + w) :=
   (0b1#1) ++ x
 
+/- TODO: Delete this. -/
 /--
 Splits a bitvector of length w into two bitvectors with length i and (w - i).
 
@@ -57,3 +58,30 @@ a bitvector with zero length.
 -/
 def split {w : Nat} (x : BitVec w) (i : Nat) : BitVec i × BitVec (w - i) :=
   (BitVec.setWidthMsb i x, BitVec.setWidthLsb (w - i) x)
+
+/- TODO: Add comment. -/
+def addc {w : Nat} (x y : BitVec w) : Bool × BitVec w := BitVec.adc x y false
+
+/- TODO: Add comment. -/
+private partial def toString' {w : Nat} (x : BitVec w) (acc : String) : String :=
+  if acc.length = w then
+    acc
+  else if x.msb then
+    toString' (x <<< 1) (acc ++ "1")
+  else
+    toString' (x <<< 1) (acc ++ "0")
+
+def toString {w : Nat} (x : BitVec w) : String := toString' x ""
+
+instance : ToString (BitVec w) where
+  toString := toString
+
+/- TODO: Add comment. -/
+def align (m₁ : BitVec p₁) (m₂ : BitVec p₂) (expDiff : Int) :=
+  let resultPrec := if expDiff > 0 then max p₁ (p₂ + expDiff.natAbs) else max (p₁ + expDiff.natAbs) p₂
+  if expDiff > 0 then
+    (m₁.setWidthLsb resultPrec, setWidthLsb resultPrec (m₂.setWidthMsb (p₂ + expDiff.natAbs)))
+  else
+    (m₂.setWidthLsb resultPrec, setWidthLsb resultPrec (m₁.setWidthMsb (p₁ + expDiff.natAbs)))
+
+end BitVec

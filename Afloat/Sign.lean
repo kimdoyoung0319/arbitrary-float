@@ -1,3 +1,5 @@
+namespace AFloat
+
 /--
 Signs possible for a floating point number.
 -/
@@ -6,12 +8,28 @@ inductive Sign where
   | neg : Sign
 deriving Repr, BEq, DecidableEq
 
+namespace Sign
+
 /--
 Negation of a sign.
 -/
-def Sign.not : Sign → Sign
+def not : Sign → Sign
   | pos => neg
   | neg => pos
 
 instance : Neg Sign where
-  neg := Sign.not
+  neg := not
+
+/--
+Conversion to String.
+-/
+def toString : Sign → String
+  | pos => "+"
+  | neg => "-"
+
+instance : ToString Sign where
+  toString := toString
+
+end Sign
+
+end AFloat
